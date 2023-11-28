@@ -1,0 +1,149 @@
+@use 'assets/styles/text';
+
+.container {
+  --tooltip-background: var(--internal-lib-name-graybase-800);
+  --tooltip-header-icon-size: 16px;
+  --tooltip-header-color: var(--internal-lib-name-white-100);
+  --tooltip-content-color: var(--internal-lib-name-graybase-100);
+  --tooltip-scrollbar-width: 4px; // will be overridden by js
+  --tooltip-scrollbar-margin: 2px;
+  --tooltip-padding: 14px
+    calc(16px - var(--tooltip-scrollbar-width) - var(--tooltip-scrollbar-margin)) 14px 16px;
+  --arrow-width: 10px;
+  --arrow-height: 6px;
+  --tooltip-max-height: 400px;
+  --tooltip-max-width: 280px;
+  --tooltip-width: fit-content;
+  --tooltip-min-width: unset;
+
+  visibility: hidden;
+  background: var(--tooltip-background);
+  border-radius: var(--internal-lib-name-radius-md);
+  opacity: 0;
+  transition: all 50ms ease;
+  transform: scale(0.9);
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--tooltip-width);
+  min-width: var(--tooltip-min-width);
+  max-width: var(--tooltip-max-width);
+  max-height: var(--tooltip-max-height);
+  padding: var(--tooltip-padding);
+  margin-right: var(--tooltip-scrollbar-margin);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scroll-margin-top: var(--tooltip-scrollbar-margin);
+
+  &::-webkit-scrollbar-track {
+    margin: var(--tooltip-scrollbar-margin) 0;
+  }
+
+  & .header {
+    @include text.subhead-md;
+
+    display: flex;
+    column-gap: 6px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    color: var(--tooltip-header-color);
+
+    & .header-icon {
+      display: flex;
+      align-items: center;
+      width: var(--tooltip-header-icon-size);
+      height: var(--tooltip-header-icon-size);
+    }
+  }
+
+  & .content {
+    @include text.body-sm;
+
+    color: var(--tooltip-content-color);
+    word-break: break-word;
+  }
+
+  &.text-align-center {
+    & .header {
+      justify-content: center;
+    }
+
+    & .content {
+      text-align: center;
+    }
+  }
+
+  &.text-align-left {
+    & .header {
+      justify-content: flex-start;
+    }
+
+    & .content {
+      text-align: left;
+    }
+  }
+}
+
+.arrow {
+  position: absolute;
+
+  &::before {
+    position: absolute;
+    content: '';
+  }
+
+  &[data-popper-placement^='bottom'] {
+    top: calc(0px - var(--arrow-height));
+
+    &::before {
+      border-right: calc(var(--arrow-width) / 2) solid transparent;
+      border-bottom: var(--arrow-height) solid var(--tooltip-background);
+      border-left: calc(var(--arrow-width) / 2) solid transparent;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  &[data-popper-placement^='top'] {
+    bottom: 0;
+
+    &::before {
+      border-top: var(--arrow-height) solid var(--tooltip-background);
+      border-right: calc(var(--arrow-width) / 2) solid transparent;
+      border-left: calc(var(--arrow-width) / 2) solid transparent;
+      transform: translateX(-50%);
+    }
+  }
+
+  &[data-popper-placement^='left'] {
+    right: 0;
+
+    &::before {
+      border-top: calc(var(--arrow-width) / 2) solid transparent;
+      border-bottom: calc(var(--arrow-width) / 2) solid transparent;
+      border-left: var(--arrow-height) solid var(--tooltip-background);
+      transform: translateY(-50%);
+    }
+  }
+
+  &[data-popper-placement^='right'] {
+    left: calc(0px - var(--arrow-height));
+
+    &::before {
+      border-top: calc(var(--arrow-width) / 2) solid transparent;
+      border-right: var(--arrow-height) solid var(--tooltip-background);
+      border-bottom: calc(var(--arrow-width) / 2) solid transparent;
+      transform: translateY(-50%);
+    }
+  }
+}

@@ -1,0 +1,233 @@
+@use 'assets/styles/text';
+
+.container {
+  --animation-duration: unset; // will be overridden by js (ex. 300ms)
+  --accordion-title-padding-top: unset;
+  --accordion-title-padding-right: unset;
+  --accordion-title-padding-bottom: unset;
+  --accordion-title-padding-left: unset;
+  --accordion-title-color: var(--internal-lib-name-white-100);
+  --accordion-button-padding: unset;
+  --accordion-button-top: unset;
+  --accordion-button-right: unset;
+  --accordion-button-left: unset;
+  --accordion-button-size: unset;
+  --accordion-button-color: unset;
+  --accordion-button-hovered-color: unset;
+  --accordion-button-background: unset;
+  --accordion-button-hovered-background: unset;
+  --accordion-button-rotate-start: unset;
+  --accordion-button-rotate-end: unset;
+  --accordion-content-padding-top: unset;
+  --accordion-content-padding-right: unset;
+  --accordion-content-padding-bottom: unset;
+  --accordion-content-padding-left: unset;
+  --accordion-content-color: unset;
+  --accordion-gap: unset;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--accordion-gap);
+
+  & .title {
+    position: relative;
+    padding: var(--accordion-title-padding-top) var(--accordion-title-padding-right)
+      var(--accordion-title-padding-bottom) var(--accordion-title-padding-left);
+    color: var(--accordion-title-color);
+    word-break: break-word;
+
+    & .button {
+      position: absolute;
+      top: var(--accordion-button-top);
+      right: var(--accordion-button-right);
+      left: var(--accordion-button-left);
+      width: var(--accordion-button-size);
+      height: var(--accordion-button-size);
+      padding: var(--accordion-button-padding);
+      color: var(--accordion-button-color);
+      user-select: none;
+      background-color: var(--accordion-button-background);
+      border-radius: 50%;
+      outline: none;
+      transition: transform var(--animation-duration), background-color var(--animation-duration),
+        color var(--animation-duration);
+      transform: rotate(var(--accordion-button-rotate-start));
+
+      &.expanded {
+        transform: rotate(var(--accordion-button-rotate-end));
+      }
+    }
+
+    &:hover {
+      & .button {
+        color: var(--accordion-button-hovered-color);
+        background-color: var(--accordion-button-hovered-background);
+      }
+    }
+  }
+
+  & .content {
+    box-sizing: content-box;
+    max-width: 652px;
+    height: 0;
+    padding: var(--accordion-content-padding-top) var(--accordion-content-padding-right)
+      var(--accordion-content-padding-bottom) var(--accordion-content-padding-left);
+    overflow: hidden;
+    color: var(--accordion-content-color);
+    word-break: break-word;
+    transition: height var(--animation-duration) ease,
+      opacity var(--animation-duration) calc(var(--animation-duration) / 2) ease;
+
+    & .inner-content {
+      box-sizing: border-box;
+    }
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--internal-lib-name-purple-200-8);
+  }
+}
+
+.variant-a {
+  --accordion-button-top: calc(var(--accordion-title-padding-top) - 3px);
+  --accordion-button-right: 12px;
+  --accordion-button-size: 32px;
+  --accordion-button-color: var(--internal-lib-name-graybase-200);
+  --accordion-button-hovered-color: var(--internal-lib-name-white-100);
+  --accordion-button-background: var(--internal-lib-name-purple-200-8);
+  --accordion-button-hovered-background: var(--internal-lib-name-purple-200-16);
+  --accordion-button-padding: 8px;
+  --accordion-button-rotate-start: 0;
+  --accordion-button-rotate-end: 45deg;
+  --accordion-content-color: var(--internal-lib-name-graybase-100);
+
+  &.container.desktop {
+    --accordion-title-padding-top: 28px;
+    --accordion-title-padding-right: 60px;
+    --accordion-title-padding-bottom: 28px;
+    --accordion-title-padding-left: 0;
+
+    & .title {
+      @include text.subhead-lg;
+
+      cursor: pointer;
+    }
+
+    & .content {
+      --accordion-content-padding-top: 0;
+      --accordion-content-padding-right: 48px;
+      --accordion-content-padding-bottom: 28px;
+      --accordion-content-padding-left: 0;
+
+      @include text.body-md;
+
+      &.exiting {
+        --accordion-content-padding-bottom: 16px; // (padding-bottom - accordion-gap)
+
+        margin-top: -16px; // (padding-bottom - accordion-gap)
+      }
+
+      &.exited {
+        --accordion-content-padding-bottom: 0;
+
+        margin-top: 0;
+      }
+    }
+
+    &.expanded {
+      --accordion-title-padding-bottom: 0;
+      --accordion-gap: 12px;
+    }
+  }
+
+  &.container.mobile {
+    --accordion-title-padding-top: 20px;
+    --accordion-title-padding-right: 60px;
+    --accordion-title-padding-bottom: 20px;
+    --accordion-title-padding-left: 0;
+
+    & .title {
+      @include text.subhead-md;
+
+      cursor: pointer;
+    }
+
+    & .content {
+      --accordion-content-padding-top: 0;
+      --accordion-content-padding-right: 48px;
+      --accordion-content-padding-bottom: 20px;
+      --accordion-content-padding-left: 0;
+
+      @include text.body-sm;
+
+      &.exiting {
+        --accordion-content-padding-bottom: 8px;
+
+        margin-top: -8px;
+      }
+
+      &.exited {
+        --accordion-content-padding-bottom: 0;
+
+        margin-top: 0;
+      }
+    }
+
+    &.expanded {
+      --accordion-title-padding-bottom: 0;
+      --accordion-gap: 12px;
+    }
+  }
+}
+
+.variant-b {
+  --accordion-title-padding-top: 16px;
+  --accordion-title-padding-left: 24px;
+  --accordion-title-padding-bottom: 16px;
+  --accordion-title-padding-right: 0;
+  --accordion-button-top: 18px;
+  --accordion-button-left: 0;
+  --accordion-button-size: 16px;
+  --accordion-button-padding: 0;
+  --accordion-button-color: var(--internal-lib-name-graybase-100);
+  --accordion-button-hovered-color: var(--internal-lib-name-white-100);
+  --accordion-button-background: unset;
+  --accordion-button-hovered-background: unset;
+  --accordion-button-rotate-start: -90deg;
+  --accordion-button-rotate-end: 0;
+  --accordion-content-padding-top: 0;
+  --accordion-content-padding-right: 24px;
+  --accordion-content-padding-bottom: 16px;
+  --accordion-content-padding-left: 24px;
+  --accordion-content-color: var(--internal-lib-name-graybase-100);
+
+  &.container.desktop,
+  &.container.mobile {
+    & .title {
+      @include text.subhead-sm;
+
+      cursor: pointer;
+    }
+
+    & .content {
+      @include text.body-sm;
+
+      &.exiting {
+        --accordion-content-padding-bottom: 8px;
+
+        margin-top: -8px;
+      }
+
+      &.exited {
+        --accordion-content-padding-bottom: 0;
+
+        margin-top: 0;
+      }
+    }
+
+    &.expanded {
+      --accordion-title-padding-bottom: 0;
+      --accordion-gap: 8px;
+    }
+  }
+}
